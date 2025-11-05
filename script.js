@@ -101,10 +101,10 @@
         }
 
         // Calcula e formata com duas casas
-        const sellingConvertion = (price * 0.84).toFixed(2).replace('.', ',');
-        const convertion = (price * rmb_value).toFixed(2).replace(".", ",");
-        const less15Off = ((price * rmb_value) - (((price * rmb_value)/100)*15)).toFixed(2).replace('.', ',');
-        const less10Off = ((price * rmb_value) - (((price * rmb_value)/100)*10)).toFixed(2).replace('.', ',');
+        const sellingConvertion = (price * 0.84).toFixed(2).replace('.', ','); // preço vezes (valor rmb de revenda)
+        const convertion = (price * rmb_value).toFixed(2).replace(".", ","); // preço vezes rmb
+        const less15Off = ((price * rmb_value) - (((price * rmb_value)/100)*15)).toFixed(2).replace('.', ','); // (preço vezes rmb) - (preço vezes rmb dividido por 100 (para ter 1°) e multiplicado por 15, logo, 15%)
+        const less10Off = ((price * rmb_value) - (((price * rmb_value)/100)*10)).toFixed(2).replace('.', ',');// (preço vezes rmb) - (preço vezes rmb dividido por 100 (para ter 1°) e multiplicado por 15, logo, 10%)
 
         // Seleciona a célula onde será inserido
         const cell = row.querySelector('td.t_Left');
