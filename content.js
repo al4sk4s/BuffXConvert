@@ -28,14 +28,18 @@
   );
 
     let taxa = 0.84;
+    let percent = 10;
 
     chrome.storage.local.get("taxaConversao", (data) => {
         taxa = data.taxaConversao ?? 0.84;
 
         console.log("Taxa de conversão atual:", taxa);
+    });
 
-    // Exemplo: usar no seu cálculo
-    // let precoFinal = precoOriginal * taxa;
+    chrome.storage.local.get("secPercent", (data) => {
+        percent = data.secPercent ?? 10;
+
+        console.log("Porcentagem atual%:", percent);
     });
 
 
@@ -78,7 +82,7 @@
     const sellingConvertion = (price * taxa).toFixed(2).replace('.', ',');
     const convertion = (price * rmb_value).toFixed(2).replace('.', ',');
     const less15Off = ((price * rmb_value) - ((price * rmb_value) * 0.15)).toFixed(2).replace('.', ',');
-    const less10Off = ((price * rmb_value) - ((price * rmb_value) * 0.10)).toFixed(2).replace('.', ',');
+    const less10Off = ((price * rmb_value) - ((price * rmb_value) * (percent/100))).toFixed(2).replace('.', ',');
 
     const cell = row.querySelector('td.t_Left');
     if (!cell) return;
@@ -90,7 +94,7 @@
 
     const span = document.createElement('span');
     const price2 = String(price).replace(".", ",");
-    span.textContent = `¥${price2} → R$${convertion} | (*${taxa}) R$${sellingConvertion} | (15%↓) R$${less15Off} | (10%↓) R$${less10Off}`;
+    span.textContent = `¥${price2} → R$${convertion} | (*${taxa}) R$${sellingConvertion} | (15%↓) R$${less15Off} | (${percent}%↓) R$${less10Off}`;
     wrapper.appendChild(span);
 
     function createCopyButton(label, value) {
@@ -114,7 +118,7 @@
 
     wrapper.appendChild(createCopyButton('📋 Preço de Revenda', sellingConvertion));
     wrapper.appendChild(createCopyButton('📋 Preço 15% OFF', less15Off));
-    wrapper.appendChild(createCopyButton('📋 Preço 10% OFF', less10Off));
+    wrapper.appendChild(createCopyButton(`📋 Preço ${percent}% OFF`, less10Off));
 
     cell.appendChild(wrapper);
     row.dataset.processedPrice084 = 'true';

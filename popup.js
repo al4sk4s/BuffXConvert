@@ -1,5 +1,7 @@
 const slider = document.getElementById("valor");
 const valueDisplay = document.getElementById("valueDisplay");
+const porcentagem = document.getElementById("porcentagem");
+const percentDisplay = document.getElementById("percentDisplay");
 const saveButton = document.getElementById("save");
 
 // Carrega valor (usa local como recomendado)
@@ -8,36 +10,47 @@ chrome.storage.local.get({ taxaConversao: 0.84 }, (data) => {
   valueDisplay.textContent = data.taxaConversao;
 });
 
+chrome.storage.local.get({ secPercent: 10 }, (data) => {
+  porcentagem.value = data.secPercent;
+  percentDisplay.textContent = data.secPercent;
+});
+
 slider.addEventListener("input", () => {
   valueDisplay.textContent = slider.value;
 });
 
+porcentagem.addEventListener("input", () => {
+  percentDisplay.textContent = porcentagem.value;
+});
+
 saveButton.addEventListener("click", () => {
-  const valor = parseFloat(slider.value);
+    const valor = parseFloat(slider.value);
 
-  // Salva no storage.local e verifica o resultado
-  chrome.storage.local.set({ taxaConversao: valor }, () => {
-    if (chrome.runtime.lastError) {
-      console.error("Erro ao salvar taxa:", chrome.runtime.lastError);
-      alert("Erro ao salvar configuração. Veja console.");
-      return;
-    }
-
-    // Confirma lendo de volta — útil para debug e garantia
-    chrome.storage.local.get("taxaConversao", (res) => {
-      console.log("Valor salvo confirmado:", res.taxaConversao);
-
-      // Recarrega a aba ativa após confirmação
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (tabs && tabs[0]) {
-          chrome.tabs.reload(tabs[0].id, () => {
-            // Fecha o popup
-            window.close();
-          });
-        } else {
-          window.close();
+    // Salva no storage.local e verifica o resultado
+    chrome.storage.local.set({ taxaConversao: valor }, () => {
+        if (chrome.runtime.lastError) {
+            console.error("Erro ao salvar taxa:", chrome.runtime.lastError);
+            alert("Erro ao salvar configuração. Veja console.");
+            return;
         }
-      });
+    
+        chrome.storage.local.set({ secPercent: porcentagem.value });
+
+        // Confirma lendo de volta — útil para debug e garantia
+        chrome.storage.local.get("taxaConversao", (res) => {
+        console.log("Valor salvo confirmado:", res.taxaConversao);
+
+        // Recarrega a aba ativa após confirmação
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (tabs && tabs[0]) {
+                chrome.tabs.reload(tabs[0].id, () => {
+                // Fecha o popup
+                window.close();
+                });
+            } else {
+                window.close();
+            }
+            });
+        });
     });
-  });
 });
