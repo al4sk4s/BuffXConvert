@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "BuffXConvert",
+  "version": "1.0",
+  "description": "Extensão que converte dados da Buff para revendedores.",
+  "permissions": ["storage", "scripting", "activeTab"],
+  "host_permissions": [
+    "https://buff.163.com/*",
+    "https://wise.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon128.png",
+      "48": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://buff.163.com/goods/*"],
+      "js": ["content.js"]
+    }
+  ]
+}

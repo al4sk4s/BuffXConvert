@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Configuração Buff</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      width: 220px;
+      padding: 10px;
+    }
+    input[type="range"] {
+      width: 100%;
+    }
+    #valueDisplay {
+      font-weight: bold;
+    }
+    button {
+      margin-top: 10px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h3>Valor de conversão</h3>
+  <input type="range" id="valor" min="0.77" max="1.0" step="0.01" value="0.84">
+  <div>Valor atual: <span id="valueDisplay">0.84</span></div>
+
+  <button id="save">Salvar e recarregar</button>
+
+  <script src="popup.js"></script>
+</body>
+</html>
