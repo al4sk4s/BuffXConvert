@@ -101,7 +101,10 @@
         }
 
         // Calcula e formata com duas casas
-        const calc = (price * 0.84).toFixed(2).replace('.', ',');
+        const sellingConvertion = (price * 0.84).toFixed(2).replace('.', ',');
+        const convertion = (price * rmb_value).toFixed(2).replace(".", ",");
+        const less15Off = ((price * rmb_value) - (((price * rmb_value)/100)*15)).toFixed(2).replace('.', ',');
+        const less10Off = ((price * rmb_value) - (((price * rmb_value)/100)*10)).toFixed(2).replace('.', ',');
 
         // Seleciona a célula onde será inserido
         const cell = row.querySelector('td.t_Left');
@@ -118,18 +121,18 @@
         // Texto com o valor calculado
         const span = document.createElement('span');
         var price2 = String(price).replace(".", ",")
-        span.textContent = `≈ ¥ ${price2} ➞ R$ ${(price * rmb_value).toFixed(2).replace(".", ",")} / (revenda) R$ ${calc}`;
+        span.textContent = `¥${price2} → R$${convertion} | (*.84) R$${sellingConvertion} | (15%↓) R$${less15Off} | (10%↓) R$${less10Off}`;
         wrapper.appendChild(span);
 
         // Botão Copiar
         const btn = document.createElement('button');
-        btn.textContent = 'Copiar';
+        btn.textContent = '📋 Preço de Revenda';
         btn.style.marginLeft = '6px';
         btn.style.cursor = 'pointer';
         btn.style.padding = '2px 6px';
         btn.style.fontSize = '0.9em';
         btn.addEventListener('click', function() {
-            navigator.clipboard.writeText(calc)
+            navigator.clipboard.writeText(sellingConvertion)
                 .then(() => {
                     const original = btn.textContent;
                     btn.textContent = 'Copiado!';
@@ -142,6 +145,50 @@
                 });
         });
         wrapper.appendChild(btn);
+
+        // Botão Copiar
+        const btn2 = document.createElement('button');
+        btn2.textContent = '📋 Preço 15% OFF';
+        btn2.style.marginLeft = '6px';
+        btn2.style.cursor = 'pointer';
+        btn2.style.padding = '2px 6px';
+        btn2.style.fontSize = '0.9em';
+        btn2.addEventListener('click', function() {
+            navigator.clipboard.writeText(less15Off)
+                .then(() => {
+                    const original2 = btn2.textContent;
+                    btn2.textContent = 'Copiado!';
+                    setTimeout(() => {
+                        btn2.textContent = original2;
+                    }, 1000);
+                })
+                .catch(err => {
+                    console.error('Tampermonkey: falha ao copiar para clipboard:', err);
+                });
+        });
+        wrapper.appendChild(btn2);
+
+        // Botão Copiar
+        const btn3 = document.createElement('button');
+        btn3.textContent = '📋 Preço 10% OFF';
+        btn3.style.marginLeft = '6px';
+        btn3.style.cursor = 'pointer';
+        btn3.style.padding = '2px 6px';
+        btn3.style.fontSize = '0.9em';
+        btn3.addEventListener('click', function() {
+            navigator.clipboard.writeText(less10Off)
+                .then(() => {
+                    const original3 = btn3.textContent;
+                    btn3.textContent = 'Copiado!';
+                    setTimeout(() => {
+                        btn3.textContent = original3;
+                    }, 1000);
+                })
+                .catch(err => {
+                    console.error('Tampermonkey: falha ao copiar para clipboard:', err);
+                });
+        });
+        wrapper.appendChild(btn3);
 
         cell.appendChild(wrapper);
         row.dataset.processedPrice084 = 'true';
